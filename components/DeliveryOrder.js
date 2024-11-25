@@ -155,7 +155,7 @@ export default function DeliveryOrder({ navigation, route }) {
               return [
                 'Transfer',
                 item?.INV_NO,
-                `${item?.NAME}\n${item?.PRINT_ADDRESS}\n\nREMARK: ${item?.REMARK}`,
+                `${item?.NAME}\n${item?.PRINT_ADDRESS}\n\nREMARK: ${item?.REMARK ? item.REMARK : ""}`,
                 item?.qty_order,
                 item?.JOB_STATUS_DESC,
               ];
@@ -183,7 +183,7 @@ export default function DeliveryOrder({ navigation, route }) {
           const transformedData = jsDelivery.map(item => [
             'Transfer',
             item?.INV_NO,
-            `${item?.NAME}\n${item?.PRINT_ADDRESS}\n\nREMARK: ${item?.REMARK}`,
+            `${item?.NAME}\n${item?.PRINT_ADDRESS}\n\nREMARK: ${item?.REMARK ? item.REMARK : " "}`,
             item?.qty_order,
             item?.JOB_STATUS_DESC,
           ]);
