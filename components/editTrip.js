@@ -48,10 +48,10 @@ function moveServicesToEnd(arr) {
 
   // If the "SERIVCES" item is found in the array
   if (index !== -1) {
-      // Remove the "SERIVCES" item from its current position
-      const [servicesItem] = arr.splice(index, 1);
-      // Push the "SERIVCES" item to the end of the array
-      arr.push(servicesItem);
+    // Remove the "SERIVCES" item from its current position
+    const [servicesItem] = arr.splice(index, 1);
+    // Push the "SERIVCES" item to the end of the array
+    arr.push(servicesItem);
   }
 
   return arr;
@@ -59,7 +59,7 @@ function moveServicesToEnd(arr) {
 
 
 export default function DeliveryOrder({ navigation, route }) {
-  console.log("This is the Invoice data ----->===>---->",moveServicesToEnd(route?.params?.invData.products));
+  console.log("This is the Invoice data ----->===>---->", moveServicesToEnd(route?.params?.invData.products));
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false)
   const editable = route?.params?.invData.JOB_STATUS_DESC !== 'Pending' && route?.params?.invData.JOB_STATUS_DESC !== 'Delivered' ? false : true;
@@ -113,8 +113,8 @@ export default function DeliveryOrder({ navigation, route }) {
 
 
   const DiesalQuantityGettingFromRouteParams = useRef(route?.params?.products[0].QTY)
-  console.log("This is the good one qty of diesal +++++++>",DiesalQuantityGettingFromRouteParams.current)
-  
+  console.log("This is the good one qty of diesal +++++++>", DiesalQuantityGettingFromRouteParams.current)
+
 
   const printHTML = async () => {
     console.log(route.params);
@@ -183,10 +183,10 @@ export default function DeliveryOrder({ navigation, route }) {
     }
   }
 
-  const JobDetailsAfterUpdate = async(invoiceNumber) => {
-    const url  = domain + `/getJOdetail?_token=404BF898-501C-469B-9FB0-C1C1CCDD7E29&invno=${invoiceNumber}`
+  const JobDetailsAfterUpdate = async (invoiceNumber) => {
+    const url = domain + `/getJOdetail?_token=404BF898-501C-469B-9FB0-C1C1CCDD7E29&invno=${invoiceNumber}`
     // console.log("this job nubmer will update now---------->", invoiceNumber);
-    try{
+    try {
       const response = await fetch(url)
       const json = await response.json()
       console.log("This is the updated invoice now You can now use the amount in them ---->", json)
@@ -194,7 +194,7 @@ export default function DeliveryOrder({ navigation, route }) {
       percentTax.current = json[0].VAT_AMT
       grandTotal.current = json[0].TOTAL_PAYABLE
       console.log('This is the updated invoice now You can now use the amount in them ---->', taxableAmount.current, percentTax.current, grandTotal.current)
-    }catch(e) {
+    } catch (e) {
       console.log(e)
     }
   }
@@ -257,14 +257,15 @@ export default function DeliveryOrder({ navigation, route }) {
       ${setLeftMarginCommand}${setRightMarginCommand}<M>9 Jalan Besut Singapore 619563</M>
       ${setLeftMarginCommand}${setRightMarginCommand}<M>Tel: 6261-6101 Fax: 6261-1037</M>
       ${setLeftMarginCommand}${setRightMarginCommand}<M>${BOLD_ON}Do no: ${route?.params?.invData.INV_NO}${BOLD_OFF}</M>
+      ${setLeftMarginCommand}${setRightMarginCommand}<M>Po no: ${route?.params?.invData.PO_NO}${BOLD_OFF}</M>
       ${setLeftMarginCommand}${setRightMarginCommand}<M>Sales Rep: ${route?.params?.invData.SALES_PERSON_NAME}</M>
       ${setLeftMarginCommand}${setRightMarginCommand}<M>Date: ${route?.params?.invData.REC_DATE}</M>\n
       ${setLeftMarginCommand}${setRightMarginCommand}<D>${BOLD_ON}To: ${route?.params?.invData.NAME}${BOLD_OFF}</D>\n
       ${OFF_CENTER}<D>Site: ${route?.params?.invData.ADDRESS2.replaceAll('\n', " ")}</D>\n
       ${OFF_CENTER}<D>Product: \n </D>`
 
-      for(let i = 0; i<productArray.length; i++) {
-        if(productArray[i].DISPLAY_NAME.includes("Transport Charges") || productArray[i].DISPLAY_NAME.includes("Labour Charges")) {
+      for (let i = 0; i < productArray.length; i++) {
+        if (productArray[i].DISPLAY_NAME.includes("Transport Charges") || productArray[i].DISPLAY_NAME.includes("Labour Charges")) {
           printTextData += `${OFF_CENTER}<D>${productArray[i].DISPLAY_NAME}</D>\n
           ${OFF_CENTER}<D>UOM: ${productArray[i].UOM_CODE}</D>\n
           ${OFF_CENTER}<D>QTY: ${BOLD_ON}${productArray[i].QTY}${BOLD_OFF}</D>\n
@@ -278,7 +279,7 @@ export default function DeliveryOrder({ navigation, route }) {
       }
       // console.log("Print Text before -----> ----->", printTextData)
       // Set right margin to 0
-      BLEPrinter.connectPrinter(printer.inner_mac_address).then(async(data) => {
+      BLEPrinter.connectPrinter(printer.inner_mac_address).then(async (data) => {
         BLEPrinter.printImage(
           `https://vellas.net/wp-content/uploads/2024/01/hshlogo3-1.webp`,
           {
@@ -294,15 +295,15 @@ export default function DeliveryOrder({ navigation, route }) {
         ${OFF_CENTER}<D>9% GST: $ ${percentTax.current}</D>
         ${OFF_CENTER}<D>TOTAl: $ ${grandTotal.current}</D>\n
         ${OFF_CENTER}<D>Remarks: ${remark == null ? '' : remark.replaceAll('\n', " ")}</D>\n\n\n`
-        
+
         //  BLEPrinter.printText(`${OFF_CENTER}<D>SUB TOTAL: $ ${route?.params?.invData.TAXABLE_AMT}</D>
         //  ${OFF_CENTER}<D>9% GST: $ ${route?.params?.invData.VAT_AMT}</D>
         //  ${OFF_CENTER}<D>TOTAl: $ ${route?.params?.invData.TOTAL_PAYABLE}</D>\n
         //  ${OFF_CENTER}<D>Remarks: ${remark == null ? '' : remark.replaceAll('\n', " ")}</D>\n\n\n`);
         // BLEPrinter.printImageBase64(sign, {
-          //   imageWidth: 300,
-          //   imageHeight: 300,
-          // });
+        //   imageWidth: 300,
+        //   imageHeight: 300,
+        // });
         BLEPrinter.printText(printTextData)
 
         if (signatureURLCopy.current) {
@@ -785,6 +786,10 @@ export default function DeliveryOrder({ navigation, route }) {
   //     "9%Tax": route?.params?.invData.VAT_AMT,
   //     "Total": route?.params?.invData.TOTAL_PAYABLE,
   //   })
+  // }, [])
+
+  // useEffect(() => {
+  //   console.log('This is PO_NO ++++++>', typeof (route?.params?.invData?.PO_NO));
   // }, [])
 
   useEffect(() => {
