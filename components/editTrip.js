@@ -281,7 +281,7 @@ export default function DeliveryOrder({ navigation, route }) {
       // Set right margin to 0
       BLEPrinter.connectPrinter(printer.inner_mac_address).then(async (data) => {
         BLEPrinter.printImage(
-          `https://vellas.net/wp-content/uploads/2024/01/hshlogo3-1.webp`,
+          `https://hsh.vellas.net:90/hshassets/hshLogo.PNG`,
           {
             imageWidth: 300,
             imageHeight: 100,
